@@ -100,10 +100,15 @@ for pixel in firstImg.getdata():
     newImgData.append(color)
 
 
+width, height = firstImg.size
+
 bound_spike = 32
 last_color = newImgData[0]
 newImgDataNormal = []
-for color in newImgData:
+for p in range(len(newImgData)):
+    color = newImgData[p]
+    if p % width == 0:
+        last_color = color
     temp = [color[0], color[1], color[2]]
     for i in range(3):
         if color[i] - last_color[i] > bound_spike:
