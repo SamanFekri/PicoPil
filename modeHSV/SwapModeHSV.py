@@ -75,7 +75,7 @@ for i in range(len(firstImgColorSorted)):
     if i < len(secondImgColorSorted):
         mapColors[firstImgColorSorted[i][0]] = secondImgColorSorted[i][0]
     else:
-        mapColors[firstImgColorSorted[i][0]] = firstImgColorSorted[i][0]
+        mapColors[firstImgColorSorted[i][0]] = secondImgColorSorted[-1][0]
 
 newImgData =[]
 for pixel in firstImg.getdata():
