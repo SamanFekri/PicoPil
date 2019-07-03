@@ -84,7 +84,7 @@ for i in range(len(firstImgColorSorted)):
     else:
         mapColors[firstImgColorSorted[i][0]] = secondImgColorSorted[-1][0]
 
-newImgData =[]
+newImgData = []
 for pixel in firstImg.getdata():
     orgColorKey = getColorClusterKey(pixel[0], pixel[1], pixel[2])
     #
@@ -99,8 +99,24 @@ for pixel in firstImg.getdata():
     color = (int(secRGB[0]), int(secRGB[1]), int(secRGB[2]))
     newImgData.append(color)
 
+
+bound_spike = 32
+last_color = newImgData[0]
+newImgDataNormal = []
+for color in newImgData:
+    temp = [color[0], color[1], color[2]]
+    for i in range(3):
+        if color[i] - last_color[i] > bound_spike:
+            temp[i] = last_color[i] + bound_spike
+        elif last_color[i] - color[i] > bound_spike:
+            temp[i] = last_color[i] - bound_spike
+
+    last_color = (temp[0], temp[1], temp[2])
+
+    newImgDataNormal.append(last_color)
+
 newImg = Image.new('RGB', firstImg.size)
-newImg.putdata(newImgData)
+newImg.putdata(newImgDataNormal)
 newImg.show()
 
 # plotBarX(list(firstImgDict.keys()), list(firstImgDict.values()))
