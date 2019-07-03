@@ -47,25 +47,41 @@ def clusterToRGB(color):
 
 
 def keyToRGB(color):
-    r = int(color[0], 16)*16
-    g = int(color[1], 16)*16
-    b = int(color[2], 16)*16
+    r = int(color[0], 16) * 16
+    g = int(color[1], 16) * 16
+    b = int(color[2], 16) * 16
     return tuple((r, g, b))
 
 
 firstImg = Image.open("../images/fly.png")
 firstImgDict = {}
-
+firstMean = {'s': 0.0, 'v': 0.0}
 for pixel in firstImg.getdata():
     colorHit(colorClusterKey=getColorClusterKey(pixel[0], pixel[1], pixel[2]),
              imgClusterDict=firstImgDict)
+    h, s, v = colorsys.rgb_to_hsv(pixel[0], pixel[1], pixel[2])
+    firstMean['s'] += s
+    firstMean['v'] += v
+
+n = len(firstImg.getdata())
+firstMean['s'] /= n
+firstMean['v'] /= n
 
 secondImg = Image.open("../images/flr.png")
 secondImgDict = {}
-
+secondMean = {'s': 0.0, 'v': 0.0}
 for pixel in secondImg.getdata():
     colorHit(colorClusterKey=getColorClusterKey(pixel[0], pixel[1], pixel[2]),
              imgClusterDict=secondImgDict)
+    h, s, v = colorsys.rgb_to_hsv(pixel[0], pixel[1], pixel[2])
+    secondMean['s'] += s
+    secondMean['v'] += v
+
+n = len(secondImg.getdata())
+secondMean['s'] /= n
+secondMean['v'] /= n
+
+diffMean = {'s': secondMean['s'] - firstMean['s'], 'v': secondMean['v'] - firstMean['v']}
 
 firstImgColorSorted = sorted(firstImgDict.items(), key=lambda kv: kv[1], reverse=True)
 firstImgDict = {}
@@ -84,7 +100,7 @@ for i in range(len(firstImgColorSorted)):
     else:
         mapColors[firstImgColorSorted[i][0]] = secondImgColorSorted[-1][0]
 
-newImgData =[]
+newImgData = []
 for pixel in firstImg.getdata():
     orgColorKey = getColorClusterKey(pixel[0], pixel[1], pixel[2])
     #
@@ -95,7 +111,7 @@ for pixel in firstImg.getdata():
     #
     sec_h, sec_s, sec_v = colorsys.rgb_to_hsv(color[0], color[1], color[2])
     #
-    secRGB = colorsys.hsv_to_rgb(sec_h, org_s, org_v)
+    secRGB = colorsys.hsv_to_rgb(sec_h, org_s + diffMean['s'], org_v + diffMean['v'])
     color = (int(secRGB[0]), int(secRGB[1]), int(secRGB[2]))
     newImgData.append(color)
 
