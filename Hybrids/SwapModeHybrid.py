@@ -123,6 +123,6 @@ for p in range(len(newImgData)):
 newImg = Image.new('RGB', firstImg.size)
 newImg.putdata(newImgDataNormal)
 newImg.show()
-
+newImg.save('../images/result_hybrid.png')
 # plotBarX(list(firstImgDict.keys()), list(firstImgDict.values()))
 # plotBarX(list(secondImgDict.keys()), list(secondImgDict.values()))
