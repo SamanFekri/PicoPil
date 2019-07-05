@@ -97,6 +97,7 @@ for pixel in firstImg.getdata():
 newImg = Image.new('RGB', firstImg.size)
 newImg.putdata(newImgData)
 newImg.show()
+newImg.save('../images/result_rgb.png')
 
 # plotBarX(list(firstImgDict.keys()), list(firstImgDict.values()))
 # plotBarX(list(secondImgDict.keys()), list(secondImgDict.values()))
