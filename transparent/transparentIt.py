@@ -1,15 +1,18 @@
 from PIL import Image
 
-img = Image.open('../images/remarked.png')
+img = Image.open('../images/edges.png')
 img = img.convert("RGBA")
 datas = img.getdata()
 
 newData = []
 for item in datas:
-    if item[0] == 255 and item[1] == 255 and item[2] == 255:
+    (R, G, B, A) = item
+    Y = 0.2126*R + 0.7152*G + 0.0722*B
+
+    if Y > 240:
         newData.append((255, 255, 255, 0))
     else:
         newData.append(item)
 
 img.putdata(newData)
-img.save("../images/remarked_transparent.png", "PNG")
+img.save("../images/edges_transparent.png", "PNG")
